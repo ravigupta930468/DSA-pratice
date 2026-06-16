@@ -50,32 +50,54 @@ JavaScript Impelemenatation:
 wirting 
 
  */
+// Helper Function: Maintains/restores the Max-Heap property
+function heapify(arr, size, index) {
+    let largest = index; // Initialize largest as root
+    let left = 2 * index + 1;  // left child index
+    let right = 2 * index + 2; // right child index
 
-const heapify=(arr,size,index)=>{
-    let largest=index 
-    let left = 2* index+1 
-    let right = 2*index+2
-    // if  left child is largetr than troot 
-    if(left<size && ar[left]>arr[largest]) { 
-        largest = left ; 
+    // If left child is larger than root
+    if (left < size && arr[left] > arr[largest]) {
+        largest = left;
     }
-    // if right child is larger than the largest so 
-    if(right<size && arr[right]>arr[largest] )
-    {
-        largest= right
+
+    // If right child is larger than the largest so far
+    if (right < size && arr[right] > arr[largest]) {
+        largest = right;
     }
-// if the largest is not the root swap and continue heapifying  down 
-if(largest!==index)
-{
-    [arr[index],arr[largest]]=[arr[largest],arr[index]]
-    // recursively heapfyin the affecte sub-tree 
-    heapify(arr,size,largest)
-}
+
+    // If the largest is not the root, swap them and continue heapifying down
+    if (largest !== index) {
+        [arr[index], arr[largest]] = [arr[largest], arr[index]];
+
+        // Recursively heapify the affected sub-tree
+        heapify(arr, size, largest);
+    }
 }
 
-// main function performs heap sort 
-function heapSort(arr){ 
-    let n =arr.length 
- // step 1 : Build the max-heap (rearrange array)
- for( let i=0; ) 
+// Main Function: Performs Heap Sort
+function heapSort(arr) {
+    let n = arr.length;
+
+    // Step 1: Build the Max-Heap (rearrange array)
+    // We start from the last non-leaf node (n/2 - 1) and work up to the root
+    for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
+        heapify(arr, n, i);
+    }
+
+    // Step 2: Extract elements from the heap one by one
+    for (let i = n - 1; i > 0; i--) {
+        // Move current root (largest element) to the end
+        [arr[0], arr[i]] = [arr[i], arr[0]];
+
+        // Call max heapify on the reduced heap to restore order
+        heapify(arr, i, 0);
+    }
+
+    return arr;
 }
+
+// Example usage:
+const unsorted = [12, 11, 13, 5, 6, 7];
+console.log(heapSort(unsorted));
+// Output: [5, 6, 7, 11, 12, 13]
